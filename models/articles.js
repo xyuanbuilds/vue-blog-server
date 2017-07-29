@@ -8,12 +8,20 @@ var articleSchema = new schema({
   "describtion": String,
   "createDate": String,
   "content": String,
-  "comment":[
+  "comment": [
     {
       "name": String,
       "email": String,
       "content": String,
-      "dateTime": String
+      "dateTime": String,
+      "comment_response": [
+        {
+          "response_name": String,
+          "response_email": String,
+          "response_content": String,
+          "response_dateTime": String
+        }
+      ]
     }
   ]
 })

@@ -76,7 +76,7 @@ router.get("/articleDetial", function (req,res) {
 
 // 发布文章
 router.post("/articleSub", function (req,res) {
-  let title = req.body.productId
+  let title = req.body.title
   let tag = req.body.tag
   let describtion = req.body.describtion
   let content = req.body.content
