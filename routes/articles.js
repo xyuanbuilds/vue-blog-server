@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var trimHtml = require('trim-html');
 
 var Article = require('./../models/articles')
+var Message = require('./../models/messages')
 
 mongoose.connect('mongodb://127.0.0.1:27017/my_blog');
 
@@ -18,6 +19,14 @@ mongoose.connection.on("error", function () {
 
 mongoose.connection.on("disconnected", function () {
   console.log("MongoDB connect disconnected");
+});
+
+router.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Credentials','true');
+    next();
 });
 
 /* GET users listing. */
@@ -74,41 +83,4 @@ router.get("/articleDetial", function (req,res) {
   })
 })
 
-// 发布文章
-router.post("/articleSub", function (req,res) {
-  let title = req.body.title
-  let tag = req.body.tag
-  let describtion = req.body.describtion
-  let content = req.body.content
-
-  let random = Math.floor(Math.random()*10)
-  let sysDate = new Date().Format('yyyMMddhhmmss')
-  let createDate = new Date().Format('yyyy-MM-dd hh:mm:ss')
-  let articleId = sysDate +random
-
-  let article = {
-      "articleId": articleId,
-      "title": title,
-      "tag": tag,
-      "describtion": describtion,
-      "createDate": createDate,
-      "content": content
-  }
-  Article.push(article)
-  Article.save(function (err,doc) {
-    if (err) {
-      res.json ({
-        status: "1",
-        msg: err.message,
-        result:''
-      })
-    } else {
-      res.json ({
-        status: '0',
-        msg: '',
-        result: 'suc'
-      })
-    }
-  })
-})
-module.exports = router;
+module.exports = router

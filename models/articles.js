@@ -26,4 +26,4 @@ var articleSchema = new schema({
   ]
 })
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('Article', articleSchema)
