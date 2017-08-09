@@ -4,9 +4,10 @@ var router = express.Router();
 
 var Message = require('./../models/messages')
 
+
 router.post("/messageSub", function (req,res) {
-  let name = req.cookies.name
-  let email = req.cookies.email
+  let name = req.body.name
+  let email = req.body.email
   let content = req.body.content
 
   let random = Math.floor(Math.random()*10)
@@ -23,8 +24,7 @@ router.post("/messageSub", function (req,res) {
       "createDate": createDate
   }
 
-  Message.push(article)
-  Message.save(function (err,doc) {
+  Message.create(message, function (err,doc) {
     if (err) {
       res.json ({
         status: "1",
@@ -40,3 +40,22 @@ router.post("/messageSub", function (req,res) {
     }
   })
 })
+
+router.get("/messageList", function (req,res) {
+  Message.find( function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+        result:''
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: doc
+      })
+    }
+  })
+})
+module.exports = router

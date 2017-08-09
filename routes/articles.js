@@ -39,7 +39,7 @@ router.get("/articleList", function (req,res) {
   let page = parseInt(req.param("page")) //浏览器参数第几页
   let pageSize = parseInt(req.param("pageSize")) //当前一页多少个
   let skip = (page - 1)*pageSize
-  let ArticleModal = Article.find().select('articleId title content').skip(skip).limit(pageSize).lean()
+  let ArticleModal = Article.find().select('articleId title tag content createDate').skip(skip).limit(pageSize).sort({_id:-1}).lean()
 
   ArticleModal.exec(function (err,doc) {
     if (err) {
@@ -65,7 +65,7 @@ router.get("/articleList", function (req,res) {
 
 // 文章详情
 router.get("/articleDetial", function (req,res) {
-  let articleId = parseInt(req.param("articleId"))
+  let articleId = req.query.articleId
   Article.findOne({articleId:articleId}, function (err,doc) {
     if (err) {
       res.json ({
@@ -83,4 +83,21 @@ router.get("/articleDetial", function (req,res) {
   })
 })
 
+// 查询标签
+router.get("/articleTags", function (req,res) {
+  Article.find().select('tag -_id').exec(function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: doc
+      })
+    }
+  })
+})
 module.exports = router
