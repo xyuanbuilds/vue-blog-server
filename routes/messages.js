@@ -1,10 +1,11 @@
 require('./../util/time')
 var express = require('express');
 var router = express.Router();
+var md5 = require('md5')
 
 var Message = require('./../models/messages')
 
-
+// 发布留言
 router.post("/messageSub", function (req,res) {
   let name = req.body.name
   let email = req.body.email
@@ -41,8 +42,10 @@ router.post("/messageSub", function (req,res) {
   })
 })
 
+// 获取留言列表
 router.get("/messageList", function (req,res) {
-  Message.find( function (err,doc) {
+  let limit = parseInt(req.query.limit)
+  Message.find().sort({_id:-1}).limit(limit).lean().exec( function (err,doc) {
     if (err) {
       res.json ({
         status: "1",
@@ -50,6 +53,9 @@ router.get("/messageList", function (req,res) {
         result:''
       })
     } else {
+      doc.forEach(function (item) {
+        item.email = md5(item.email)
+      })
       res.json ({
         status: '0',
         msg: '',

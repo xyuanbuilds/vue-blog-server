@@ -70,4 +70,44 @@ router.post("/articleSub", function (req,res) {
   })
 })
 
+// 删除文章
+router.post("/articleDelete", function (req,res) {
+  let articleId = req.body.articleId
+  Article.remove({articleId:articleId}, function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+        result:''
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      })
+    }
+  })
+})
+
+// 修改文章
+router.post("/articleModify", function (req,res) {
+  let content = req.body.content
+  let articleId = req.body.articleId
+  Article.findOneAndUpdate({articleId:articleId}, {$set: {content:content}}, function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+        result:''
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      })
+    }
+  })
+})
 module.exports = router
