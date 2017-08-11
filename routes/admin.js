@@ -1,8 +1,10 @@
 require('./../util/time')
 var express = require('express');
+var md5 = require('md5');
 var router = express.Router();
 
 var Article = require('./../models/articles')
+var User = require('./../models/users')
 
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -12,7 +14,7 @@ router.get("/articleList", function (req,res) {
   let page = parseInt(req.param("page")) //浏览器参数第几页
   let pageSize = parseInt(req.param("pageSize")) //当前一页多少个
   let skip = (page - 1)*pageSize
-  let ArticleModal = Article.find().skip(skip).limit(pageSize).lean()
+  let ArticleModal = Article.find().skip(skip).limit(pageSize).sort({_id:-1}).lean()
 
   ArticleModal.exec(function (err,doc) {
     if (err) {
@@ -107,6 +109,44 @@ router.post("/articleModify", function (req,res) {
         msg: '',
         result: 'suc'
       })
+    }
+  })
+})
+
+router.get("/login", function (req,res) {
+  let account = req.query.account
+  let password = req.query.password
+  User.find({account:account}).lean().exec(function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+        result:''
+      })
+    } else {
+      if (!doc.password) {
+        res.json ({
+          status: "1",
+          msg: '',
+          result:'无此用户'
+        })
+      } else {
+        let pwd = md5(doc.password)
+        doc.password = md5(doc.password)
+        if (password == pwd) {
+          res.json ({
+            status: '0',
+            msg: '',
+            result: doc
+          })
+        } else {
+          res.json ({
+            status: '1',
+            msg: '',
+            result: '密码错误'
+          })
+        }
+      }
     }
   })
 })

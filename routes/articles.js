@@ -21,14 +21,6 @@ mongoose.connection.on("disconnected", function () {
   console.log("MongoDB connect disconnected");
 });
 
-router.all('*', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    res.header('Access-Control-Allow-Credentials','true');
-    next();
-});
-
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
