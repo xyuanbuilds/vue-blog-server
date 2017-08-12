@@ -116,7 +116,7 @@ router.post("/articleModify", function (req,res) {
 router.get("/login", function (req,res) {
   let account = req.query.account
   let password = req.query.password
-  User.find({account:account}).lean().exec(function (err,doc) {
+  User.findOne({account:account}).lean().exec(function (err,doc) {
     if (err) {
       res.json ({
         status: "1",
@@ -128,25 +128,25 @@ router.get("/login", function (req,res) {
         res.json ({
           status: "1",
           msg: '',
-          result:'无此用户'
+          result: '无此用户'
         })
       } else {
-        let pwd = md5(doc.password)
-        doc.password = md5(doc.password)
-        if (password == pwd) {
-          res.json ({
-            status: '0',
-            msg: '',
-            result: doc
-          })
-        } else {
-          res.json ({
-            status: '1',
-            msg: '',
-            result: '密码错误'
-          })
+          let pwd = md5(doc.password)
+          doc.password = md5(doc.password)
+          if (password == pwd) {
+            res.json ({
+              status: '0',
+              msg: '',
+              result: doc
+            })
+          } else {
+            res.json ({
+              status: '1',
+              msg: '',
+              result: doc
+            })
+          }
         }
-      }
     }
   })
 })
