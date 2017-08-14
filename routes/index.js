@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const articles = require('./articles')
+const messages = require('./messages')
+const admin = require('./admin')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+module.exports = (app) => {
+    app.use(articles)
+    app.use(messages)
+    app.use(admin)
+}

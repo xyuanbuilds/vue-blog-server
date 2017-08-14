@@ -22,12 +22,12 @@ mongoose.connection.on("disconnected", function () {
 });
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/api/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
 // 分页检索文章
-router.get("/articleList", function (req,res) {
+router.get("/api/articleList", function (req,res) {
   let page = parseInt(req.param("page")) //浏览器参数第几页
   let pageSize = parseInt(req.param("pageSize")) //当前一页多少个
   let skip = (page - 1)*pageSize
@@ -56,7 +56,7 @@ router.get("/articleList", function (req,res) {
 })
 
 // 文章详情
-router.get("/articleDetial", function (req,res) {
+router.get("/api/articleDetial", function (req,res) {
   let articleId = req.query.articleId
   Article.findOne({articleId:articleId}, function (err,doc) {
     if (err) {
@@ -76,7 +76,7 @@ router.get("/articleDetial", function (req,res) {
 })
 
 // 查询标签
-router.get("/articleTags", function (req,res) {
+router.get("/api/articleTags", function (req,res) {
   Article.find().select('tag -_id').exec(function (err,doc) {
     if (err) {
       res.json ({
@@ -93,7 +93,7 @@ router.get("/articleTags", function (req,res) {
   })
 })
 
-router.get("/tagsDetial", function (req,res) {
+router.get("/api/tagsDetial", function (req,res) {
     let tag = req.param("tag")
     let page = parseInt(req.param("page")) //浏览器参数第几页
     let pageSize = parseInt(req.param("pageSize")) //当前一页多少个

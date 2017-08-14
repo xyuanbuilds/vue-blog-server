@@ -6,11 +6,7 @@ var router = express.Router();
 var Article = require('./../models/articles')
 var User = require('./../models/users')
 
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-router.get("/articleList", function (req,res) {
+router.get("/api/articleList_admin", function (req,res) {
   let page = parseInt(req.param("page")) //浏览器参数第几页
   let pageSize = parseInt(req.param("pageSize")) //当前一页多少个
   let skip = (page - 1)*pageSize
@@ -36,7 +32,7 @@ router.get("/articleList", function (req,res) {
 })
 
 // 发布文章
-router.post("/articleSub", function (req,res) {
+router.post("/api/articleSub", function (req,res) {
   let title = req.body.title
   let tag = req.body.tag
   let describtion = req.body.describtion
@@ -73,7 +69,7 @@ router.post("/articleSub", function (req,res) {
 })
 
 // 删除文章
-router.post("/articleDelete", function (req,res) {
+router.post("/api/articleDelete", function (req,res) {
   let articleId = req.body.articleId
   Article.remove({articleId:articleId}, function (err,doc) {
     if (err) {
@@ -93,7 +89,7 @@ router.post("/articleDelete", function (req,res) {
 })
 
 // 修改文章
-router.post("/articleModify", function (req,res) {
+router.post("/api/articleModify", function (req,res) {
   let content = req.body.content
   let articleId = req.body.articleId
   Article.findOneAndUpdate({articleId:articleId}, {$set: {content:content}}, function (err,doc) {
@@ -113,7 +109,7 @@ router.post("/articleModify", function (req,res) {
   })
 })
 
-router.get("/login", function (req,res) {
+router.get("/api/login", function (req,res) {
   let account = req.query.account
   let password = req.query.password
   User.findOne({account:account}).lean().exec(function (err,doc) {

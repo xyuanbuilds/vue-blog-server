@@ -6,7 +6,7 @@ var md5 = require('md5')
 var Message = require('./../models/messages')
 
 // 发布留言
-router.post("/messageSub", function (req,res) {
+router.post("/api/messageSub", function (req,res) {
   let name = req.body.name
   let email = req.body.email
   let content = req.body.content
@@ -43,7 +43,7 @@ router.post("/messageSub", function (req,res) {
 })
 
 // 获取留言列表
-router.get("/messageList", function (req,res) {
+router.get("/api/messageList", function (req,res) {
   let limit = parseInt(req.query.limit)
   Message.find().sort({_id:-1}).limit(limit).lean().exec( function (err,doc) {
     if (err) {
