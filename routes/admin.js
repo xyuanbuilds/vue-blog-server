@@ -1,11 +1,12 @@
 require('./../util/time')
-var express = require('express');
-var md5 = require('md5');
-var router = express.Router();
+let express = require('express');
+let md5 = require('md5');
+let router = express.Router();
 
-var Article = require('./../models/articles')
-var User = require('./../models/users')
-
+let Article = require('./../models/articles')
+let User = require('./../models/users')
+let Tags = require('./../models/tags')
+// 文章列表
 router.get("/api/articleList_admin", function (req,res) {
   let page = parseInt(req.param("page")) //浏览器参数第几页
   let pageSize = parseInt(req.param("pageSize")) //当前一页多少个
@@ -109,6 +110,7 @@ router.post("/api/articleModify", function (req,res) {
   })
 })
 
+// 登录管理界面
 router.get("/api/login", function (req,res) {
   let account = req.query.account
   let password = req.query.password
@@ -143,6 +145,67 @@ router.get("/api/login", function (req,res) {
             })
           }
         }
+    }
+  })
+})
+
+// 标签列表
+router.get("/api/tags", function (req,res) {
+  Tags.find(function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: {
+          count: doc.length,
+          list: doc
+        }
+      })
+    }
+  })
+})
+
+// 删除标签
+router.post("/api/tagsDelete", function (req,res) {
+  let tagDel = req.body.tagDel
+  Tags.remove({name:tagDel}, function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+        result:''
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      })
+    }
+  })
+})
+
+// 添加标签
+router.post("/api/tagsAdd", function (req,res) {
+  let tagAdd = req.body.tagAdd
+  Tags.create({name:tagAdd}, function (err,doc) {
+    if (err) {
+      res.json ({
+        status: "1",
+        msg: err.message,
+        result:''
+      })
+    } else {
+      res.json ({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      })
     }
   })
 })
